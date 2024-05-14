@@ -4,7 +4,8 @@ import com.webapp.spirngbootthymeleafcrudapp.model.Employee;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-
+//check typo in index.html
+//works when you manually hit https://localhost8080/employees/csv
 @Component
 public class CsvGeneratorUtil {
     private static final String CSV_HEADER = "firstName,lastName,Email\n";
