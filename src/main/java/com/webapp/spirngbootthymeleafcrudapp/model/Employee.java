@@ -2,9 +2,12 @@ package com.webapp.spirngbootthymeleafcrudapp.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Data
+@Getter@Setter
 @Table(name = "employees")
 public class Employee {
     @Id
@@ -28,4 +31,5 @@ public class Employee {
     public Long getId() {
         return id;
     }
+
 }

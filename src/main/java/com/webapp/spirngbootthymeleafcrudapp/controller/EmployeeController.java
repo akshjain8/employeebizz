@@ -1,10 +1,15 @@
 package com.webapp.spirngbootthymeleafcrudapp.controller;
 
+import com.webapp.spirngbootthymeleafcrudapp.Util.CsvGeneratorUtil;
 import com.webapp.spirngbootthymeleafcrudapp.model.Employee;
 import com.webapp.spirngbootthymeleafcrudapp.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +19,12 @@ import java.util.List;
 public class EmployeeController {
 
 
+    @Autowired
+    private final  CsvGeneratorUtil csvGeneratorUtil;
     private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeController(CsvGeneratorUtil csvGeneratorUtil, EmployeeService employeeService) {
+        this.csvGeneratorUtil = csvGeneratorUtil;
         this.employeeService = employeeService;
     }
 
@@ -42,6 +50,21 @@ public class EmployeeController {
 Employee employee = employeeService.getEmployeebyId(id);
 model.addAttribute("employee",employee);
 return "update_employee";
+    }
+
+
+
+    @GetMapping("/employees/csv")
+    public ResponseEntity<byte[]> generateCsvFile() {
+        List<Employee> employees = this.employeeService.getAllEmployees();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "employees.csv");
+
+        byte[] csvBytes = csvGeneratorUtil.generateCsv(employees).getBytes();
+
+        return new ResponseEntity<>(csvBytes, headers, HttpStatus.OK);
     }
 
     @GetMapping("/deleteEmployee/{id}")
