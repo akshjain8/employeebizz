@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
+//employee entity
 @Entity
 @Data
 @Getter@Setter
